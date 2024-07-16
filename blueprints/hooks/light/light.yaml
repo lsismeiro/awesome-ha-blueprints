@@ -354,7 +354,6 @@ variables:
   # Check if the selected controller model is predefined
   is_predefined: '{{ controller_model in controller_mapping }}'
 
-  # TODO: unfortunately, there is no feedback other than the logs if the file does not exist - maybe there is a better way
   # Load custom controller model mappings
   custom_controller_mapping: !include_dir_named ahb_custom_mappings
 
@@ -362,84 +361,91 @@ variables:
   brightness_up: >
     {% if is_predefined %}
       {{ controller_mapping[controller_model]["brightness_up"] | default(None) }}
-    {% else %}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
       {{ custom_controller_mapping[controller_model]["brightness_up"] | default(None) }}
+    {% else %}  
+      {{ none }}
     {% endif %}
   brightness_up_repeat: >
     {% if is_predefined %}
       {{ controller_mapping[controller_model]["brightness_up_repeat"] | default(None) }}
-    {% else %}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
       {{ custom_controller_mapping[controller_model]["brightness_up_repeat"] | default(None) }}
+    {% else %}  
+      {{ none }}
     {% endif %}
   brightness_down: >
     {% if is_predefined %}
       {{ controller_mapping[controller_model]["brightness_down"] | default(None) }}
-    {% else %}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
       {{ custom_controller_mapping[controller_model]["brightness_down"] | default(None) }}
+    {% else %}  
+      {{ none }}
     {% endif %}
   brightness_down_repeat: >
     {% if is_predefined %}
       {{ controller_mapping[controller_model]["brightness_down_repeat"] | default(None) }}
-    {% else %}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
       {{ custom_controller_mapping[controller_model]["brightness_down_repeat"] | default(None) }}
+    {% else %}  
+      {{ none }}
     {% endif %}
   color_up: >
     {% if is_predefined %}
       {{ controller_mapping[controller_model]["color_up"] | default(None) }}
-    {% else %}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
       {{ custom_controller_mapping[controller_model]["color_up"] | default(None) }}
+    {% else %}  
+      {{ none }}
     {% endif %}
   color_up_repeat: >
     {% if is_predefined %}
       {{ controller_mapping[controller_model]["color_up_repeat"] | default(None) }}
-    {% else %}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
       {{ custom_controller_mapping[controller_model]["color_up_repeat"] | default(None) }}
+    {% else %}  
+      {{ none }}
     {% endif %}
   color_down: >
     {% if is_predefined %}
       {{ controller_mapping[controller_model]["color_down"] | default(None) }}
-    {% else %}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
       {{ custom_controller_mapping[controller_model]["color_down"] | default(None) }}
+    {% else %}  
+      {{ none }}
     {% endif %}
   color_down_repeat: >
     {% if is_predefined %}
       {{ controller_mapping[controller_model]["color_down_repeat"] | default(None) }}
-    {% else %}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
       {{ custom_controller_mapping[controller_model]["color_down_repeat"] | default(None) }}
+    {% else %}  
+      {{ none }}
     {% endif %}
   toggle: >
     {% if is_predefined %}
       {{ controller_mapping[controller_model]["toggle"] | default(None) }}
-    {% else %}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
       {{ custom_controller_mapping[controller_model]["toggle"] | default(None) }}
+    {% else %}  
+      {{ none }}
     {% endif %}
   turn_on: >
     {% if is_predefined %}
       {{ controller_mapping[controller_model]["turn_on"] | default(None) }}
-    {% else %}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
       {{ custom_controller_mapping[controller_model]["turn_on"] | default(None) }}
+    {% else %}  
+      {{ none }}
     {% endif %}
   turn_off: >
     {% if is_predefined %}
       {{ controller_mapping[controller_model]["turn_off"] | default(None) }}
-    {% else %}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
       {{ custom_controller_mapping[controller_model]["turn_off"] | default(None) }}
+    {% else %}  
+      {{ none }}
     {% endif %}
-
-  mapping_exists: >
-    {{ 
-      brightness_up is not none or 
-      brightness_up_repeat is not none or 
-      brightness_down is not none or 
-      brightness_down_repeat is not none or 
-      color_up is not none or 
-      color_up_repeat is not none or 
-      color_down is not none or 
-      color_down_repeat is not none or 
-      toggle is not none or 
-      turn_on is not none or 
-      turn_off is not none 
-    }}
 
   light_color_mode: !input light_color_mode
   light: !input light
@@ -480,7 +486,20 @@ trigger:
 condition:
   # Fail if the mapping was unsuccessful
   - condition: template
-    value_template: '{{ mapping_exists }}'
+    value_template: >
+      {{ 
+        brightness_up is not none or 
+        brightness_up_repeat is not none or 
+        brightness_down is not none or 
+        brightness_down_repeat is not none or 
+        color_up is not none or 
+        color_up_repeat is not none or 
+        color_down is not none or 
+        color_down_repeat is not none or 
+        toggle is not none or 
+        turn_on is not none or 
+        turn_off is not none 
+      }}
 action:
   - variables:
       action: '{{ trigger.event.data.action }}'
