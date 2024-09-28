@@ -69,7 +69,7 @@ blueprint:
         entity:
           domain: light
     cycle_scene_dropdown:
-      name: (Optional) Helper - Scene Dropdown
+      name: (Optional) Scene dropdown
       description: Dropdown selection containing a list of scenes. Needed when one of the buttons is configured to cycle scenes.
       default: ''
       selector:
