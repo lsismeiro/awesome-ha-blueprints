@@ -69,6 +69,13 @@ blueprint:
       selector:
         entity:
           domain: light
+    cycle_scene_dropdown:
+      name: (Optional) Scene dropdown
+      description: Dropdown selection containing a list of scenes. Needed when one of the buttons is configured to cycle scenes.
+      default: ''
+      selector:
+        entity:
+          domain: input_select
     light_color_mode:
       name: (Optional) Light color mode
       description: Specify how the controller will set the light color. Choose "Color Temperature" and "Hue - Saturation" depending on the features supported by your light. If you are not sure you can select "Auto". "None" will disable color control features.
@@ -422,6 +429,22 @@ variables:
     {% else %}  
       {{ none }}
     {% endif %}
+  cycle_scenes_forward: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["cycle_scenes_forward"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["cycle_scenes_forward"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+  cycle_scenes_backward: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["cycle_scenes_backward"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["cycle_scenes_backward"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
   toggle: >
     {% if is_predefined %}
       {{ controller_mapping[controller_model]["toggle"] | default(None) }}
@@ -447,6 +470,7 @@ variables:
       {{ none }}
     {% endif %}
 
+  cycle_scene_dropdown: !input cycle_scene_dropdown
   light_color_mode: !input light_color_mode
   light: !input light
   light_transition: !input light_transition
@@ -496,6 +520,8 @@ condition:
         color_up_repeat is not none or 
         color_down is not none or 
         color_down_repeat is not none or 
+        cycle_scenes_forward is not none or
+        cycle_scenes_backward is not none or
         toggle is not none or 
         turn_on is not none or 
         turn_off is not none 
@@ -538,6 +564,30 @@ action:
         sequence:
           - service: light.turn_off
             entity_id: !input light
+            data:
+                  transition: '{{ light_transition / 1000 }}'
+      - conditions: '{{ action == cycle_scenes_forward }}'
+        sequence:
+          - service: input_select.select_next
+            data:
+              cycle: true
+            target:
+              entity_id: '{{ cycle_scene_dropdown }}'
+          - service: scene.turn_on
+            target:
+              entity_id: "{{ states(cycle_scene_dropdown) }}"
+            data:
+              transition: '{{ light_transition / 1000 }}'
+      - conditions: '{{ action == cycle_scenes_backward }}'
+        sequence:
+          - service: input_select.select_previous
+            data:
+              cycle: true
+            target:
+              entity_id: '{{ cycle_scene_dropdown }}'
+          - service: scene.turn_on
+            target:
+              entity_id: "{{ states(cycle_scene_dropdown) }}"
             data:
               transition: '{{ light_transition / 1000 }}'
       - conditions: '{{ action == brightness_up }}'
