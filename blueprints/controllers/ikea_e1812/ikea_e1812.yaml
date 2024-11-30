@@ -149,8 +149,8 @@ variables:
       button_release: ['1003']
     zha:
       button_short: ['on']
-      button_long: [move_with_on_off_0_83]
-      button_release: [stop]
+      button_long: [move_with_on_off_0_83, 'move_with_on_off_MoveMode.Up_83']
+      button_release: [stop, stop_with_on_off]
     zigbee2mqtt:
       button_short: ['on']
       button_long: [brightness_move_up]
