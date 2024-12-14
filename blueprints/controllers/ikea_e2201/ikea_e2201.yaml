@@ -3,23 +3,23 @@ blueprint:
   homeassistant:
     min_version: 2023.6.0
   author: yarafie
-  name: Controller - IKEA E1743 TRÅDFRI On/Off Switch & Dimmer
+  name: Controller - IKEA E2201 RODRET Dimmer
   description: |
-    # Controller - IKEA E1743 TRÅDFRI On/Off Switch & Dimmer
+    # Controller - IKEA E2201 RODRET Dimmer 
 
-    Controller automation for executing any kind of action triggered by the provided IKEA E1743 TRÅDFRI On/Off Switch & Dimmer. Allows to optionally loop an action on a button long press.
+    Controller automation for executing any kind of action triggered by the provided IKEA E2201 RODRET Dimmer. Allows to optionally loop an action on a button long press.
     Supports deCONZ, ZHA, Zigbee2MQTT.
 
     Automations created with this blueprint can be connected with one or more [Hooks](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/hooks) supported by this controller.
     Hooks allow to easily create controller-based automations for interacting with media players, lights, covers and more.
-    See the list of [Hooks available for this controller](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/controllers/ikea_e1743#available-hooks) for additional details.
+    See the list of [Hooks available for this controller](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/controllers/ikea_e2201#available-hooks) for additional details.
 
-    📕 Full documentation regarding this blueprint is available [here](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/controllers/ikea_e1743).
+    📕 Full documentation regarding this blueprint is available [here](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/controllers/ikea_e2201).
 
     🚀 This blueprint is part of the **[Awesome HA Blueprints](https://epmatt.github.io/awesome-ha-blueprints) project**.
 
     ℹ️ Version 2023.10.05
-  source_url: https://raw.githubusercontent.com/lsismeiro/awesome-ha-blueprints/refs/heads/main/blueprints/controllers/ikea_e1743/ikea_e1743.yaml
+  source_url: https://raw.githubusercontent.com/lsismeiro/awesome-ha-blueprints/refs/heads/main/blueprints/controllers/ikea_e2201/ikea_e2201.yaml
   domain: automation
   input:
     integration:
@@ -51,7 +51,7 @@ blueprint:
          filter:
          - integration: mqtt
            manufacturer: IKEA
-           model: TRADFRI on/off switch (E1743)
+           model: RODRET wireless dimmer/power switch (E2201)
          multiple: false
     helper_last_controller_event:
       name: (Required) Helper - Last Controller Event
