@@ -38,11 +38,18 @@ blueprint:
         device:
     controller_entity:
       name: (Zigbee2MQTT) Controller Entity
-      description: The action sensor of the controller to use for the automation. Choose a value only if the remote is integrated with Zigbee2MQTT.
+#CHANGED - YAR      description: The action sensor of the controller to use for the automation. Choose a value only if the remote is integrated with Zigbee2MQTT.
+      description: The controller device to use for the automation. Choose a value only if the remote is integrated with Zigbee2MQTT.
       default: ''
       selector:
-        entity:
-          domain: sensor
+#CHANGED - YAR        entity:
+#CHANGED - YAR          domain: sensor
+        device:
+          filter:
+          - integration: mqtt
+            manufacturer: IKEA
+            model: TRADFRI on/off switch (E1743)
+          multiple: false
     helper_last_controller_event:
       name: (Required) Helper - Last Controller Event
       description: Input Text used to store the last event fired by the controller. You will need to manually create a text input entity for this, please read the blueprint Additional Notes for more info.
@@ -233,10 +240,35 @@ mode: restart
 max_exceeded: silent
 trigger:
   # trigger for zigbee2mqtt
-  - platform: event
-    event_type: state_changed
-    event_data:
-      entity_id: !input controller_entity
+#CHANGED - YAR  - platform: event
+#CHANGED - YAR    event_type: state_changed
+#CHANGED - YAR    event_data:
+#CHANGED - YAR      entity_id: !input controller_entity
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_entity
+    type: action
+    subtype: 'on'
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_entity
+    type: action
+    subtype: 'off'
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_entity
+    type: action
+    subtype: brightness_move_up
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_entity
+    type: action
+    subtype: brightness_move_down
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_entity
+    type: action
+    subtype: brightness_stop
   # trigger for other integrations
   - platform: event
     event_type:
@@ -251,7 +283,8 @@ condition:
       - >-
         {%- set trigger_action -%}
         {%- if integration_id == "zigbee2mqtt" -%}
-        {{ trigger.event.data.new_state.state }}
+#CHANGED - YAR        {{ trigger.event.data.new_state.state }}
+        {{ trigger.payload }}
         {%- elif integration_id == "deconz" -%}
         {{ trigger.event.data.event }}
         {%- elif integration_id == "zha" -%}
@@ -261,7 +294,8 @@ condition:
         {{ trigger_action not in ["","None"] }}
       # only for zigbee2mqtt, check if the event is relative to a real state change, and not only some minor changes in the sensor attributes
       # this is required since multiple state_changed events are fired for a single button press, with the result of the automation being triggered multiple times
-      - '{{ integration_id != "zigbee2mqtt" or trigger.event.data.new_state.state != trigger.event.data.old_state.state }}'
+#CHANGED - YAR      - '{{ integration_id != "zigbee2mqtt" or trigger.event.data.new_state.state != trigger.event.data.old_state.state }}'
+      - '{{ integration_id != "zigbee2mqtt" or trigger.payload != last_controller_event }}'
 action:
   # debouncing - when automation is triggered multiple times, the last automation run is the one which completes execution, due to mode restart
   # therefore previous runs must wait for the debounce delay before executing any other action
@@ -273,7 +307,8 @@ action:
   - variables:
       trigger_action: >-
         {%- if integration_id == "zigbee2mqtt" -%}
-        {{ trigger.event.data.new_state.state }}
+#CHANGED - YAR        {{ trigger.event.data.new_state.state }}
+        {{ trigger.payload }}
         {%- elif integration_id == "deconz" -%}
         {{ trigger.event.data.event }}
         {%- elif integration_id == "zha" -%}
