@@ -2,11 +2,11 @@
 blueprint:
   homeassistant:
     min_version: "2023.6.0"
-  name: Controller - IKEA E1743 TRÅDFRI On/Off Switch & Dimmer
+  name: Controller - IKEA E2201 RODRET Dimmer
   description: |
-    # Controller - IKEA E1743 TRÅDFRI On/Off Switch & Dimmer
+    # Controller - IKEA E2201 RODRET Dimmer
 
-    Controller automation for executing any kind of action triggered by the provided IKEA E1743 TRÅDFRI On/Off Switch & Dimmer. Allows to optionally loop an action on a button long press.
+    Controller automation for executing any kind of action triggered by the provided IKEA E2201 RODRET Dimmer. Allows to optionally loop an action on a button long press.
 #YAR - CHANGED    Supports deCONZ, ZHA, Zigbee2MQTT.
 #YAR - ADD - To Support Zigbee2MQTT v2.0.0 with legacy=false
     Supports deCONZ, ZHA, Zigbee2MQTT and Zigbee2MQTT V2.0.0 with legacy=false.
@@ -59,7 +59,7 @@ blueprint:
           filter:
           - integration: mqtt
             manufacturer: IKEA
-            model: TRADFRI on/off switch (E1743)
+            model: RODRET wireless dimmer/power switch (E2201)
           multiple: false
 #YAR - ADD END
     helper_last_controller_event:
