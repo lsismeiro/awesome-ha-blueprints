@@ -4,12 +4,12 @@ blueprint:
     min_version: "2023.6.0"
   name: Controller - IKEA E2201 RODRET Dimmer
   #YAR - CHANGED    Supports deCONZ, ZHA, Zigbee2MQTT.
-  #YAR - ADD - To Support Zigbee2MQTT v2.0.0 with legacy=false
+  #YAR - ADD - To Support Zigbee2MQTT_V2 with legacy=false
   description: |
     # Controller - IKEA E2201 RODRET Dimmer
 
     Controller automation for executing any kind of action triggered by the provided IKEA E2201 RODRET Dimmer. Allows to optionally loop an action on a button long press.
-    Supports deCONZ, ZHA, Zigbee2MQTT and Zigbee2MQTT V2.0.0 with legacy=false.
+    Supports deCONZ, ZHA, Zigbee2MQTT and Zigbee2MQTT_V2 with legacy=false.
 
     Automations created with this blueprint can be connected with one or more [Hooks](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/hooks) supported by this controller.
     Hooks allow to easily create controller-based automations for interacting with media players, lights, covers and more.
@@ -33,11 +33,11 @@ blueprint:
             - deCONZ
             - ZHA
             - Zigbee2MQTT
-            #YAR - ADD - To Support Zigbee2MQTT v2.0.0 with legacy=false
+            #YAR - ADD - To Support Zigbee2MQTT_V2 with legacy=false
             - Zigbee2MQTT_V2
             #YAR - ADD END
     controller_device:
-      name: (deCONZ, ZHA, Zigbee2MQTT_v2.0.0) Controller Device
+      name: (deCONZ, ZHA, Zigbee2MQTT_V2) Controller Device
       description: The controller device to use for the automation. Choose a value only if the remote is integrated with deCONZ, ZHA, Zigbee2MQTT_V2.
       default: ''
       selector:
@@ -230,7 +230,7 @@ variables:
       button_down_short: ['off']
       button_down_long: [brightness_move_down]
       button_down_release: [brightness_stop]
-    #YAR - ADD - To Support Zigbee2MQTT v2.0.0 with legacy=false
+    #YAR - ADD - To Support Zigbee2MQTT_V2 with legacy=false
     zigbee2mqtt_v2:
       button_up_short: ['on']
       button_up_long: [brightness_move_up]
@@ -249,7 +249,7 @@ variables:
   button_down_release: '{{ actions_mapping[integration_id]["button_down_release"] }}'
   # integrations which need to store the previous press event to determine which button was released
   #YAR - CHANGED  integrations_with_prev_event_storage: [zha, zigbee2mqtt]
-  #YAR - ADD - To Support Zigbee2MQTT v2.0.0 with legacy=false
+  #YAR - ADD - To Support Zigbee2MQTT_V2 with legacy=false
   integrations_with_prev_event_storage: [zha, zigbee2mqtt, zigbee2mqtt_v2]
   #YAR - ADD END
   # build data to send within a controller event
@@ -264,7 +264,7 @@ trigger:
     event_type: state_changed
     event_data:
       entity_id: !input controller_entity
-  #YAR - ADD - To Support Zigbee2MQTT v2.0.0 with legacy=false
+  #YAR - ADD - To Support Zigbee2MQTT_V2 with legacy=false
   # triggers for zigbee2mqtt_v2
   - platform: device
     domain: mqtt
@@ -303,7 +303,7 @@ condition:
   - condition: and
     conditions:
       # check that the button event is not empty
-      #YAR - ADD - To Support Zigbee2MQTT v2.0.0 with legacy=false
+      #YAR - ADD - To Support Zigbee2MQTT_V2 with legacy=false
       - >-
         {%- set trigger_action -%}
         {%- if integration_id == "zigbee2mqtt" -%}
@@ -321,7 +321,7 @@ condition:
       # only for zigbee2mqtt, check if the event is relative to a real state change, and not only some minor changes in the sensor attributes
       # this is required since multiple state_changed events are fired for a single button press, with the result of the automation being triggered multiple times
       - '{{ integration_id != "zigbee2mqtt" or trigger.event.data.new_state.state != trigger.event.data.old_state.state }}'
-      #YAR - ADD - To Support Zigbee2MQTT v2.0.0 with legacy=false
+      #YAR - ADD - To Support Zigbee2MQTT_V2 with legacy=false
       - '{{ integration_id != "zigbee2mqtt_v2" or trigger.payload != last_controller_event }}'
       #YAR - ADD END
 action:
@@ -333,7 +333,7 @@ action:
   # extract button event from the trigger
   # provide a single string value to check against
   - variables:
-      #YAR - ADD - To Support Zigbee2MQTT v2.0.0 with legacy=false
+      #YAR - ADD - To Support Zigbee2MQTT_V2 with legacy=false
       trigger_action: >-
         {%- if integration_id == "zigbee2mqtt" -%}
         {{ trigger.event.data.new_state.state }}

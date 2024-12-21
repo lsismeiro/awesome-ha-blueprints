@@ -8,7 +8,7 @@ blueprint:
     *This blueprint is reported to work with IKEA Styrbar (E2001/E2002)*
 
     Controller automation for executing any kind of action triggered by the provided IKEA E2001/E2002 STYRBAR Remote control. Allows to optionally loop an action on a button long press.
-    Supports deCONZ, ZHA, Zigbee2MQTT, and Zigbee2MQTT V2.0.0 with legacy=false.
+    Supports deCONZ, ZHA, Zigbee2MQTT, and Zigbee2MQTT_V2 with legacy=false.
 
     Automations created with this blueprint can be connected with one or more [Hooks](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/hooks) supported by this controller.
     Hooks allow to easily create controller-based automations for interacting with media players, lights, covers and more.
@@ -33,8 +33,8 @@ blueprint:
             - Zigbee2MQTT
             - Zigbee2MQTT_V2
     controller_device:
-      name: (deCONZ, ZHA, Zigbee2MQTT_v2.0.0) Controller Device
-      description: The controller device to use for the automation. Choose a value only if the remote is integrated with deCONZ, ZHA, Zigbee2MQTT_v2.0.0.
+      name: (deCONZ, ZHA, Zigbee2MQTT_V2) Controller Device
+      description: The controller device to use for the automation. Choose a value only if the remote is integrated with deCONZ, ZHA, Zigbee2MQTT_V2.
       default: ''
       selector:
         device:
@@ -461,7 +461,7 @@ condition:
       # only for zigbee2mqtt, check if the event is relative to a real state change, and not only some minor changes in the sensor attributes
       # this is required since multiple state_changed events are fired for a single button press, with the result of the automation being triggered multiple times
       - '{{ integration_id != "zigbee2mqtt" or trigger.event.data.new_state.state != trigger.event.data.old_state.state }}'
-      - '{{ integration_id != "zigbee2mqtt_2" or trigger.payload != last_controller_event }}'
+      - '{{ integration_id != "zigbee2mqtt_v2" or trigger.payload != last_controller_event }}'
 action:
   # debouncing - when automation is triggered multiple times, the last automation run is the one which completes execution, due to mode restart
   # therefore previous runs must wait for the debounce delay before executing any other action
@@ -474,7 +474,7 @@ action:
       trigger_action: >-
         {%- if integration_id == "zigbee2mqtt" -%}
         {{ trigger.event.data.new_state.state }}
-        {%- elif integration_id == "zigbee2mqtt_2" -%}
+        {%- elif integration_id == "zigbee2mqtt_v2" -%}
         {{ trigger.payload }}
         {%- elif integration_id == "deconz" -%}
         {{ trigger.event.data.event }}
