@@ -5,7 +5,7 @@ blueprint:
     # Controller - IKEA E1524/E1810 TRÅDFRI Wireless 5-Button Remote
 
     Controller automation for executing any kind of action triggered by the provided IKEA E1524/E1810 TRÅDFRI Wireless 5-Button Remote. Allows to optionally loop an action on a button long press.
-    Supports deCONZ, ZHA, Zigbee2MQTT.
+    Supports deCONZ, ZHA, Zigbee2MQTT, Zigbee2MQTT V2.0.0 with legacy=false.
 
     Automations created with this blueprint can be connected with one or more [Hooks](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/hooks) supported by this controller.
     Hooks allow to easily create controller-based automations for interacting with media players, lights, covers and more.
@@ -29,9 +29,10 @@ blueprint:
             - deCONZ
             - ZHA
             - Zigbee2MQTT
+            - Zigbee2MQTT_V2
     controller_device:
-      name: (deCONZ, ZHA) Controller Device
-      description: The controller device to use for the automation. Choose a value only if the remote is integrated with deCONZ, ZHA.
+      name: (deCONZ, ZHA, Zigbee2MQTT_V2) Controller Device
+      description: The controller device to use for the automation. Choose a value only if the remote is integrated with deCONZ, ZHA, Zigbee2MQTT_V2.
       default: ''
       selector:
         device:
@@ -365,6 +366,21 @@ variables:
       button_down_release: [brightness_down_release]
       button_center_short: [toggle]
       button_center_long: [toggle_hold]
+    zigbee2mqtt_v2:
+      button_left_short: [arrow_left_click]
+      button_left_long: [arrow_left_hold]
+      button_left_release: [arrow_left_release]
+      button_right_short: [arrow_right_click]
+      button_right_long: [arrow_right_hold]
+      button_right_release: [arrow_right_release]
+      button_up_short: [brightness_up_click]
+      button_up_long: [brightness_up_hold]
+      button_up_release: [brightness_up_release]
+      button_down_short: [brightness_down_click]
+      button_down_long: [brightness_down_hold]
+      button_down_release: [brightness_down_release]
+      button_center_short: [toggle]
+      button_center_long: [toggle_hold]
   # pre-choose actions for buttons based on configured integration
   # no need to perform this task at automation runtime
   button_left_short: '{{ actions_mapping[integration_id]["button_left_short"] }}'
@@ -395,6 +411,77 @@ trigger:
     event_type: state_changed
     event_data:
       entity_id: !input controller_entity
+  # triggers for zigbee2mqtt_v2
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: arrow_left_click
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: arrow_left_hold
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: arrow_left_release
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: arrow_right_click
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: arrow_right_hold
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: arrow_right_release
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: brightness_up_click
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: brightness_up_hold
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: brightness_up_release
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: brightness_down_click
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: brightness_down_hold
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: brightness_down_release
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: toggle
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: toggle_hold
   # trigger for other integrations
   - platform: event
     event_type:
@@ -410,6 +497,8 @@ condition:
         {%- set trigger_action -%}
         {%- if integration_id == "zigbee2mqtt" -%}
         {{ trigger.event.data.new_state.state }}
+        {%- elif integration_id == "zigbee2mqtt_v2" -%}
+        {{ trigger.payload }}
         {%- elif integration_id == "deconz" -%}
         {{ trigger.event.data.event }}
         {%- elif integration_id == "zha" -%}
@@ -420,6 +509,7 @@ condition:
       # only for zigbee2mqtt, check if the event is relative to a real state change, and not only some minor changes in the sensor attributes
       # this is required since multiple state_changed events are fired for a single button press, with the result of the automation being triggered multiple times
       - '{{ integration_id != "zigbee2mqtt" or trigger.event.data.new_state.state != trigger.event.data.old_state.state }}'
+      - '{{ integration_id != "zigbee2mqtt_v2" or trigger.payload != last_controller_event }}'
 action:
   # debouncing - when automation is triggered multiple times, the last automation run is the one which completes execution, due to mode restart
   # therefore previous runs must wait for the debounce delay before executing any other action
@@ -432,6 +522,8 @@ action:
       trigger_action: >-
         {%- if integration_id == "zigbee2mqtt" -%}
         {{ trigger.event.data.new_state.state }}
+        {%- elif integration_id == "zigbee2mqtt_v2" -%}
+        {{ trigger.payload }}
         {%- elif integration_id == "deconz" -%}
         {{ trigger.event.data.event }}
         {%- elif integration_id == "zha" -%}

@@ -38,7 +38,7 @@ blueprint:
             #YAR - ADD END
     controller_device:
       name: (deCONZ, ZHA, Zigbee2MQTT_v2.0.0) Controller Device
-      description: The controller device to use for the automation. Choose a value only if the remote is integrated with deCONZ, ZHA.
+      description: The controller device to use for the automation. Choose a value only if the remote is integrated with deCONZ, ZHA, Zigbee2MQTT_V2.
       default: ''
       selector:
         device:
