@@ -33,17 +33,6 @@ blueprint:
       selector:
         entity:
           domain: sensor
-#YAR - ADD - To Support Zigbee2MQTT v2.0.0 with legacy=false
-    controller_mqtt:
-      name: (Required) Controller MQTT Device
-      description: The controller device which will control the Light. Choose a value only if the integration used to connect the controller to Home Assistant exposes it as a Device. This value should match the one specified in the corresponding Controller automation.
-      default: ''
-      selector:
-        device:
-          filter:
-          - integration: mqtt
-          multiple: false
-#YAR - ADD END
     controller_model:
       name: (Required) Controller model
       description: The model for the controller used in this automation. Choose a value from the list of supported controllers.
@@ -428,12 +417,6 @@ trigger:
     event_type: ahb_controller_event
     event_data:
       controller: !input controller_entity
-#YAR - ADD - To Support Zigbee2MQTT v2.0.0 with legacy=false
-  - platform: event
-    event_type: ahb_controller_event
-    event_data:
-      controller: !input controller_mqtt
-#YAR - ADD END
 condition: []
 action:
   - variables:
