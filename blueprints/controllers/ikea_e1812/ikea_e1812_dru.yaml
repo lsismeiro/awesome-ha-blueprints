@@ -44,9 +44,13 @@ blueprint:
           filter:
           - integration: mqtt
             manufacturer: IKEA
+            model: TRADFRI shortcut button (E1812)
           - integration: zha
             manufacturer: IKEA of Sweden
+            model: TRADFRI SHORTCUT button
           - integration: deconz
+            manufacturer: IKEA of Sweden
+            model: TRADFRI SHORTCUT button
           multiple: false
     controller_entity:
       name: (Zigbee2MQTT) Controller Entity

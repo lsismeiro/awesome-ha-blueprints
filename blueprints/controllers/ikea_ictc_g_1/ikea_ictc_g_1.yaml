@@ -38,9 +38,12 @@ blueprint:
           filter:
           - integration: mqtt
             manufacturer: IKEA
+            model: TRADFRI wireless dimmer (ICTC-G-1)
           - integration: zha
             manufacturer: IKEA of Sweden
+            model: TRADFRI wireless dimmer
           - integration: deconz
+            model: TRADFRI wireless dimmer
           multiple: false
     controller_entity:
       name: (Zigbee2MQTT) Controller Entity
