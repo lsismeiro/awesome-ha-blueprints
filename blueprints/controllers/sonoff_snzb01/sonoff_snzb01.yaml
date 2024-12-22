@@ -37,8 +37,14 @@ blueprint:
         device:
           filter:
           - integration: mqtt
+            manufacturer: eWeLink
+            model: Wireless button (SNZB-01)
           - integration: zha
+            manufacturer: eWeLink
+            model: WB01
           - integration: deconz
+            manufacturer: eWeLink
+            model: WB01
           multiple: false
     controller_entity:
       name: (Zigbee2MQTT) Controller Entity
