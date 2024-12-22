@@ -50,6 +50,8 @@ blueprint:
             manufacturer: IKEA of Sweden
             model: TRADFRI on/off switch
           - integration: deconz
+            manufacturer: IKEA of Sweden
+            model: TRADFRI on/off switch
           multiple: false
     controller_entity:
       name: (Zigbee2MQTT) Controller Entity
