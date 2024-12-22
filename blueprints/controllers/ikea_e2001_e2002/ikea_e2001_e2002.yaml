@@ -37,6 +37,17 @@ blueprint:
       default: ''
       selector:
         device:
+          filter:
+          - integration: mqtt
+            manufacturer: IKEA
+            model: STYRBAR remote control (E2001/E2002)
+          - integration: zha
+            manufacturer: IKEA of Sweden
+            model: Remote Control N2
+          - integration: deconz
+            manufacturer: IKEA of Sweden
+            model: Remote Control N2
+          multiple: false
     controller_entity:
       name: (Zigbee2MQTT) Controller Entity
       description: The action sensor of the controller to use for the automation. Choose a value only if the remote is integrated with Zigbee2MQTT.
