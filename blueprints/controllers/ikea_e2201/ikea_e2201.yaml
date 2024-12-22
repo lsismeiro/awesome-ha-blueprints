@@ -50,6 +50,8 @@ blueprint:
             manufacturer: IKEA of Sweden
             model: RODRET Dimmer
           - integration: deconz
+            manufacturer: IKEA of Sweden
+            model: RODRET Dimmer
           multiple: false
     controller_entity:
       name: (Zigbee2MQTT) Controller Entity
