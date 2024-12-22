@@ -39,9 +39,13 @@ blueprint:
           filter:
           - integration: mqtt
             manufacturer: IKEA
+            model: TRADFRI remote control (E1524/E1810)
           - integration: zha
             manufacturer: IKEA of Sweden
+            model: TRADFRI remote control
           - integration: deconz
+            manufacturer: IKEA of Sweden
+            model: TRADFRI remote control
           multiple: false
     controller_entity:
       name: (Zigbee2MQTT) Controller Entity
