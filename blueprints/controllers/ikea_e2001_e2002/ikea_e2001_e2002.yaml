@@ -5,8 +5,7 @@ blueprint:
   name: Controller - IKEA E2001/E2002 STYRBAR Remote control
   description: |
     # Controller - IKEA E2001/E2002 STYRBAR Remote control
-    *This blueprint is reported to work with IKEA Styrbar (E2001/E2002)*
-
+    
     Controller automation for executing any kind of action triggered by the provided IKEA E2001/E2002 STYRBAR Remote control. Allows to optionally loop an action on a button long press.
     Supports deCONZ, ZHA, Zigbee2MQTT, and Zigbee2MQTT_V2 with legacy=false.
 
