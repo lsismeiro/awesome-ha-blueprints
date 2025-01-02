@@ -38,7 +38,8 @@ blueprint:
       description: The model for the controller used in this automation. Choose a value from the list of supported controllers.
       selector:
         select:
-          options:
+          custom_value: true
+          options: 
             - IKEA E1524/E1810 TRÅDFRI Wireless 5-Button Remote
             - IKEA E1743 TRÅDFRI On/Off Switch & Dimmer
             - IKEA E1743 TRÅDFRI On/Off Switch & Dimmer (#2)
@@ -68,6 +69,13 @@ blueprint:
       selector:
         entity:
           domain: light
+    cycle_scene_dropdown:
+      name: (Optional) Scene dropdown
+      description: Dropdown selection containing a list of scenes. Needed when one of the buttons is configured to cycle scenes.
+      default: ''
+      selector:
+        entity:
+          domain: input_select
     light_color_mode:
       name: (Optional) Light color mode
       description: Specify how the controller will set the light color. Choose "Color Temperature" and "Hue - Saturation" depending on the features supported by your light. If you are not sure you can select "Auto". "None" will disable color control features.
@@ -195,8 +203,9 @@ blueprint:
 variables:
   # convert blueprint inputs into variables to be used in templates
   controller_model: !input controller_model
-  # supported controllers and mappings
-  controller_mapping:
+
+  # predefined controllers and mappings
+  controller_mapping: 
     IKEA E1524/E1810 TRÅDFRI Wireless 5-Button Remote:
       brightness_up: button_up_short
       brightness_up_repeat: button_up_long
@@ -348,19 +357,120 @@ variables:
     Xiaomi WXKG11LM Aqara Wireless Switch Mini:
       toggle: button_short
       color_up: button_double
-  # pre-choose actions for buttons based on configured controller
-  # no need to perform this task at automation runtime
-  brightness_up: '{{ controller_mapping[controller_model]["brightness_up"] | default(None) }}'
-  brightness_up_repeat: '{{ controller_mapping[controller_model]["brightness_up_repeat"] | default(None) }}'
-  brightness_down: '{{ controller_mapping[controller_model]["brightness_down"] | default(None) }}'
-  brightness_down_repeat: '{{ controller_mapping[controller_model]["brightness_down_repeat"] | default(None) }}'
-  color_up: '{{ controller_mapping[controller_model]["color_up"] | default(None) }}'
-  color_up_repeat: '{{ controller_mapping[controller_model]["color_up_repeat"] | default(None) }}'
-  color_down: '{{ controller_mapping[controller_model]["color_down"] | default(None) }}'
-  color_down_repeat: '{{ controller_mapping[controller_model]["color_down_repeat"] | default(None) }}'
-  toggle: '{{ controller_mapping[controller_model]["toggle"] | default(None) }}'
-  turn_on: '{{ controller_mapping[controller_model]["turn_on"] | default(None) }}'
-  turn_off: '{{ controller_mapping[controller_model]["turn_off"] | default(None) }}'
+   
+  # Check if the selected controller model is predefined
+  is_predefined: '{{ controller_model in controller_mapping }}'
+
+  # Load custom controller model mappings
+  custom_controller_mapping: !include_dir_named ahb_custom_mappings
+
+  # Pre-choose actions for buttons based on configured controller if predefined
+  brightness_up: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["brightness_up"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["brightness_up"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+  brightness_up_repeat: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["brightness_up_repeat"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["brightness_up_repeat"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+  brightness_down: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["brightness_down"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["brightness_down"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+  brightness_down_repeat: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["brightness_down_repeat"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["brightness_down_repeat"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+  color_up: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["color_up"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["color_up"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+  color_up_repeat: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["color_up_repeat"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["color_up_repeat"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+  color_down: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["color_down"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["color_down"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+  color_down_repeat: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["color_down_repeat"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["color_down_repeat"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+  cycle_scenes_forward: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["cycle_scenes_forward"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["cycle_scenes_forward"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+  cycle_scenes_backward: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["cycle_scenes_backward"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["cycle_scenes_backward"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+  toggle: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["toggle"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["toggle"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+  turn_on: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["turn_on"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["turn_on"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+  turn_off: >
+    {% if is_predefined %}
+      {{ controller_mapping[controller_model]["turn_off"] | default(None) }}
+    {% elif ( custom_controller_mapping[controller_model] | default(None)) is not none %}
+      {{ custom_controller_mapping[controller_model]["turn_off"] | default(None) }}
+    {% else %}  
+      {{ none }}
+    {% endif %}
+
+  cycle_scene_dropdown: !input cycle_scene_dropdown
   light_color_mode: !input light_color_mode
   light: !input light
   light_transition: !input light_transition
@@ -397,7 +507,25 @@ trigger:
     event_type: ahb_controller_event
     event_data:
       controller: !input controller_entity
-condition: []
+condition:
+  # Fail if the mapping was unsuccessful
+  - condition: template
+    value_template: >
+      {{ 
+        brightness_up is not none or 
+        brightness_up_repeat is not none or 
+        brightness_down is not none or 
+        brightness_down_repeat is not none or 
+        color_up is not none or 
+        color_up_repeat is not none or 
+        color_down is not none or 
+        color_down_repeat is not none or 
+        cycle_scenes_forward is not none or
+        cycle_scenes_backward is not none or
+        toggle is not none or 
+        turn_on is not none or 
+        turn_off is not none 
+      }}
 action:
   - variables:
       action: '{{ trigger.event.data.action }}'
@@ -436,6 +564,30 @@ action:
         sequence:
           - service: light.turn_off
             entity_id: !input light
+            data:
+                  transition: '{{ light_transition / 1000 }}'
+      - conditions: '{{ action == cycle_scenes_forward }}'
+        sequence:
+          - service: input_select.select_next
+            data:
+              cycle: true
+            target:
+              entity_id: '{{ cycle_scene_dropdown }}'
+          - service: scene.turn_on
+            target:
+              entity_id: "{{ states(cycle_scene_dropdown) }}"
+            data:
+              transition: '{{ light_transition / 1000 }}'
+      - conditions: '{{ action == cycle_scenes_backward }}'
+        sequence:
+          - service: input_select.select_previous
+            data:
+              cycle: true
+            target:
+              entity_id: '{{ cycle_scene_dropdown }}'
+          - service: scene.turn_on
+            target:
+              entity_id: "{{ states(cycle_scene_dropdown) }}"
             data:
               transition: '{{ light_transition / 1000 }}'
       - conditions: '{{ action == brightness_up }}'
