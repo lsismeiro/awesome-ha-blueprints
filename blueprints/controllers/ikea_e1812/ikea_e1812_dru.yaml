@@ -14,7 +14,7 @@ blueprint:
     for additional details.\n\n\U0001F4D5 Full documentation regarding this blueprint
     is available [here](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/controllers/ikea_e1812).\n\n\U0001F680
     This blueprint is part of the **[Awesome HA Blueprints](https://epmatt.github.io/awesome-ha-blueprints)
-    project**.\n\nℹ️ Version 2022.08.08 - modified by removing obsolete helpers relating to calculated double press. See https://github.com/lsismeiro/awesome-ha-blueprints/issues/12#issuecomment-2018106528 \n"
+    project**.\n\nℹ️ Version 2025-01-01 - modified by removing obsolete helpers relating to calculated double press. See https://github.com/lsismeiro/awesome-ha-blueprints/issues/12#issuecomment-2018106528 \n"
   source_url: https://github.com/lsismeiro/awesome-ha-blueprints/blob/main/blueprints/controllers/ikea_e1812/ikea_e1812_dru.yaml
   domain: automation
   input:
