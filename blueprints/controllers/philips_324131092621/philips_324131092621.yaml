@@ -1,5 +1,7 @@
 # Blueprint metadata
 blueprint:
+  homeassistant:
+    min_version: "2023.6.0"
   name: Controller - Philips 324131092621 Hue Dimmer switch
   description: |
     # Controller - Philips 324131092621 Hue Dimmer switch
@@ -15,7 +17,7 @@ blueprint:
 
     🚀 This blueprint is part of the **[Awesome HA Blueprints](https://epmatt.github.io/awesome-ha-blueprints) project**.
 
-    ℹ️ Version 2025.01.03
+    ℹ️ Version 2025.01.04
   source_url: https://github.com/lsismeiro/awesome-ha-blueprints/blob/main/blueprints/controllers/philips_324131092621/philips_324131092621.yaml
   domain: automation
   input:
@@ -361,6 +363,8 @@ variables:
   button_down_short: '{{ actions_mapping[integration_id]["button_down_short"] }}'
   button_down_long: '{{ actions_mapping[integration_id]["button_down_long"] }}'
   button_down_release: '{{ actions_mapping[integration_id]["button_down_release"] }}'
+  # integrations which need to store the previous press event to determine which button was released
+  integrations_with_prev_event_storage: [zha, zigbee2mqtt, zigbee2mqtt_v2]
   # build data to send within a controller event
   controller_entity: !input controller_entity
   controller_device: !input controller_device
@@ -454,7 +458,7 @@ condition:
         {%- elif integration_id == "deconz" -%}
         {{ trigger.event.data.event }}
         {%- elif integration_id == "zha" -%}
-        {{ trigger.event.data.command }}
+        {{ trigger.event.data.command }}{{"_" if trigger.event.data.args|length > 0}}{{ trigger.event.data.args|join("_") }}
         {%- endif -%}
         {%- endset -%}
         {{ trigger_action not in ["","None"] }}
@@ -462,7 +466,6 @@ condition:
       # this is required since multiple state_changed events are fired for a single button press, with the result of the automation being triggered multiple times
       - '{{ integration_id != "zigbee2mqtt" or trigger.event.data.new_state.state != trigger.event.data.old_state.state }}'
       - '{{ integration_id != "zigbee2mqtt_v2" or trigger.payload != last_controller_event }}'
-
 action:
   # debouncing - when automation is triggered multiple times, the last automation run is the one which completes execution, due to mode restart
   # therefore previous runs must wait for the debounce delay before executing any other action
@@ -480,9 +483,10 @@ action:
         {%- elif integration_id == "deconz" -%}
         {{ trigger.event.data.event }}
         {%- elif integration_id == "zha" -%}
-        {{ trigger.event.data.command }}
+        {{ trigger.event.data.command }}{{"_" if trigger.event.data.args|length > 0}}{{ trigger.event.data.args|join("_") }}
         {%- endif -%}
       trigger_delta: '{{ (as_timestamp(now()) - ((states(helper_last_controller_event) | from_json).t if helper_last_controller_event is not none and (states(helper_last_controller_event) | regex_match("^\{((\"a\": \".*\"|\"t\": \d+\.\d+)(, )?){2}\}$")) else as_timestamp("1970-01-01 00:00:00"))) * 1000 }}'
+      last_controller_event: '{{ (states(helper_last_controller_event) | from_json).a if helper_last_controller_event is not none and (states(helper_last_controller_event) | regex_match("^\{((\"a\":\".*\"|\"t\":\d+\.\d+)(,)?){2}\}$")) else "" }}'
   # update helper
   - service: input_text.set_value
     data:
@@ -559,7 +563,10 @@ action:
                       sequence: !input action_button_on_long
             # if looping is not enabled run the custom action only once
             default: !input action_button_on_long
-      - conditions: '{{ trigger_action | string in button_on_release }}'
+      - conditions:
+          - '{{ trigger_action | string in button_on_release }}'
+          # for integrations which need to store the last controller event, need to check the previous button event, stored in the provided input_text
+          - '{{ not integration_id in integrations_with_prev_event_storage or last_controller_event | string in button_on_long }}'
         sequence:
           # fire the event
           - event: ahb_controller_event
@@ -639,7 +646,10 @@ action:
                       sequence: !input action_button_off_long
             # if looping is not enabled run the custom action only once
             default: !input action_button_off_long
-      - conditions: '{{ trigger_action | string in button_off_release }}'
+      - conditions:
+          -'{{ trigger_action | string in button_off_release }}'
+          # for integrations which need to store the last controller event, need to check the previous button event, stored in the provided input_text
+          - '{{ not integration_id in integrations_with_prev_event_storage or last_controller_event | string in button_off_long }}'
         sequence:
           # fire the event
           - event: ahb_controller_event
@@ -719,7 +729,10 @@ action:
                       sequence: !input action_button_up_long
             # if looping is not enabled run the custom action only once
             default: !input action_button_up_long
-      - conditions: '{{ trigger_action | string in button_up_release }}'
+      - conditions:
+          - '{{ trigger_action | string in button_up_release }}'
+          # for integrations which need to store the last controller event, need to check the previous button event, stored in the provided input_text
+          - '{{ not integration_id in integrations_with_prev_event_storage or last_controller_event | string in button_up_long }}'
         sequence:
           # fire the event
           - event: ahb_controller_event
@@ -799,7 +812,10 @@ action:
                       sequence: !input action_button_down_long
             # if looping is not enabled run the custom action only once
             default: !input action_button_down_long
-      - conditions: '{{ trigger_action | string in button_down_release }}'
+      - conditions:
+          - '{{ trigger_action | string in button_down_release }}'
+          # for integrations which need to store the last controller event, need to check the previous button event, stored in the provided input_text
+          - '{{ not integration_id in integrations_with_prev_event_storage or last_controller_event | string in button_down_long }}'
         sequence:
           # fire the event
           - event: ahb_controller_event
