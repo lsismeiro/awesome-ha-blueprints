@@ -395,105 +395,105 @@ trigger:
       entity_id: !input controller_entity
   # triggers for zigbee2mqtt_v2
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_1_single
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_1_single
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_1_hold
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_1_hold
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_1_release
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_1_release
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_1_double
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_1_double
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_1_triple
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_1_triple
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_2_single
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_2_single
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_2_hold
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_2_hold
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_2_release
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_2_release
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_2_double
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_2_double
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_2_triple
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_2_triple
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_3_single
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_3_single
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_3_hold
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_3_hold
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_3_release
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_3_release
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_3_double
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_3_double
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_3_triple
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_3_triple
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_4_single
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_4_single
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_4_hold
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_4_hold
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_4_release
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_4_release
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_4_double
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_4_double
   - platform: device
-        domain: mqtt
-        device_id: !input controller_device
-        type: action
-        subtype: button_4_triple
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: button_4_triple
   # trigger for other integrations
   - platform: event
     event_type:
