@@ -1,7 +1,8 @@
 # Blueprint metadata
 blueprint:
+  domain: automation
   homeassistant:
-    min_version: "2023.6.0"
+    min_version: 2023.6.0
   name: Controller - Philips 324131092621 Hue Dimmer switch
   description: |
     # Controller - Philips 324131092621 Hue Dimmer switch
@@ -19,7 +20,6 @@ blueprint:
 
     ℹ️ Version 2025.01.04
   source_url: https://github.com/lsismeiro/awesome-ha-blueprints/blob/main/blueprints/controllers/philips_324131092621/philips_324131092621.yaml
-  domain: automation
   input:
     integration:
       name: (Required) Integration
@@ -382,62 +382,62 @@ trigger:
     domain: mqtt
     device_id: !input controller_device
     type: action
-    subtype: button_on_short
+    subtype: on_press
   - platform: device
     domain: mqtt
     device_id: !input controller_device
     type: action
-    subtype: button_on_long
+    subtype: on_hold
   - platform: device
     domain: mqtt
     device_id: !input controller_device
     type: action
-    subtype: button_on_release
+    subtype: on_hold_release
   - platform: device
     domain: mqtt
     device_id: !input controller_device
     type: action
-    subtype: button_off_short
+    subtype: off_press
   - platform: device
     domain: mqtt
     device_id: !input controller_device
     type: action
-    subtype: button_off_long
+    subtype: off_hold
   - platform: device
     domain: mqtt
     device_id: !input controller_device
     type: action
-    subtype: button_off_release
+    subtype: off_hold_release
   - platform: device
     domain: mqtt
     device_id: !input controller_device
     type: action
-    subtype: button_up_short
+    subtype: up_press
   - platform: device
     domain: mqtt
     device_id: !input controller_device
     type: action
-    subtype: button_up_long
+    subtype: up_hold
   - platform: device
     domain: mqtt
     device_id: !input controller_device
     type: action
-    subtype: button_up_release
+    subtype: up_hold_release
   - platform: device
     domain: mqtt
     device_id: !input controller_device
     type: action
-    subtype: button_down_short
+    subtype: down_press
   - platform: device
     domain: mqtt
     device_id: !input controller_device
     type: action
-    subtype: button_down_long
+    subtype: down_hold
   - platform: device
     domain: mqtt
     device_id: !input controller_device
     type: action
-    subtype: button_down_release
+    subtype: down_hold_release
   # trigger for other integrations
   - platform: event
     event_type:
@@ -647,7 +647,7 @@ action:
             # if looping is not enabled run the custom action only once
             default: !input action_button_off_long
       - conditions:
-          -'{{ trigger_action | string in button_off_release }}'
+          - '{{ trigger_action | string in button_off_release }}'
           # for integrations which need to store the last controller event, need to check the previous button event, stored in the provided input_text
           - '{{ not integration_id in integrations_with_prev_event_storage or last_controller_event | string in button_off_long }}'
         sequence:
