@@ -1,8 +1,6 @@
 # Blueprint metadata
 blueprint:
   domain: automation
-  homeassistant:
-    min_version: 2023.6.0
   name: Controller - IKEA E2201 RODRET Dimmer
   #YAR - CHANGED    Supports deCONZ, ZHA, Zigbee2MQTT.
   #YAR - ADD - To Support Zigbee2MQTT_V2 with legacy=false

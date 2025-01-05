@@ -1,8 +1,6 @@
 # Blueprint metadata
 blueprint:
   domain: automation
-  homeassistant:
-    min_version: 2023.6.0
   name: Controller - IKEA E1812 TRÅDFRI Shortcut button
   description: |
     # Controller - IKEA E1812 TRÅDFRI Shortcut button

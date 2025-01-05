@@ -1,8 +1,6 @@
 # Blueprint metadata
 blueprint:
   domain: automation
-  homeassistant:
-    min_version: 2023.6.0
   name: Controller - IKEA ICTC-G-1 TRÅDFRI wireless dimmer
   description: |
     # Controller - IKEA ICTC-G-1 TRÅDFRI wireless dimmer
