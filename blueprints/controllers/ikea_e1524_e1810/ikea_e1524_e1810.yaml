@@ -1,11 +1,14 @@
 # Blueprint metadata
 blueprint:
+  domain: automation
+  homeassistant:
+    min_version: 2023.6.0
   name: Controller - IKEA E1524/E1810 TRÅDFRI Wireless 5-Button Remote
   description: |
     # Controller - IKEA E1524/E1810 TRÅDFRI Wireless 5-Button Remote
 
     Controller automation for executing any kind of action triggered by the provided IKEA E1524/E1810 TRÅDFRI Wireless 5-Button Remote. Allows to optionally loop an action on a button long press.
-    Supports deCONZ, ZHA, Zigbee2MQTT, Zigbee2MQTT_V2 with legacy=false.
+    Supports deCONZ, ZHA, Zigbee2MQTT and Zigbee2MQTT_V2 with legacy=false.
 
     Automations created with this blueprint can be connected with one or more [Hooks](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/hooks) supported by this controller.
     Hooks allow to easily create controller-based automations for interacting with media players, lights, covers and more.
@@ -18,10 +21,6 @@ blueprint:
     ℹ️ Version 2025-01-01
 
   source_url: https://github.com/lsismeiro/awesome-ha-blueprints/blob/main/blueprints/controllers/ikea_e1524_e1810/ikea_e1524_e1810.yaml
-
-  domain: automation
-  homeassistant:
-    min_version: 2023.5.0
   input:
     integration:
       name: (Required) Integration

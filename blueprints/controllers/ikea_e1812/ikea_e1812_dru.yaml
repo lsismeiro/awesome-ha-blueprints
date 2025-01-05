@@ -1,28 +1,30 @@
+# Blueprint metadata
 blueprint:
+  domain: automation
   homeassistant:
     min_version: 2023.6.0
   name: Controller - IKEA E1812 TRÅDFRI Shortcut button [dru]
-  description:
-    "# Controller - IKEA E1812 TRÅDFRI Shortcut button\n\nController automation
-    for executing any kind of action triggered by the provided IKEA E1812 TRÅDFRI
-    Shortcut button. Allows to optionally loop an action on a button long press.\nSupports
-    deCONZ, ZHA, Zigbee2MQTT, Zigbee2MQTT_V2 with legacy=false.\n\nAutomations created with this blueprint can be connected
-    with one or more [Hooks](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/hooks)
-    supported by this controller.\nHooks allow to easily create controller-based automations
-    for interacting with media players, lights, covers and more.\nSee the list of
-    [Hooks available for this controller](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/controllers/ikea_e1812#available-hooks)
-    for additional details.\n\n\U0001F4D5 Full documentation regarding this blueprint
-    is available [here](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/controllers/ikea_e1812).\n\n\U0001F680
-    This blueprint is part of the **[Awesome HA Blueprints](https://epmatt.github.io/awesome-ha-blueprints)
-    project**.\n\nℹ️ Version 2025-01-01 - modified by removing obsolete helpers relating to calculated double press. See https://github.com/lsismeiro/awesome-ha-blueprints/issues/12#issuecomment-2018106528 \n"
+  description: |
+    # Controller - IKEA E1812 TRÅDFRI Shortcut button [dru]
+
+    Controller automation for executing any kind of action triggered by the provided IKEA E1812 TRÅDFRI Shortcut button. Allows to optionally loop an action on a button long press.
+    Supports deCONZ, ZHA, Zigbee2MQTT and Zigbee2MQTT_V2 with legacy=false.
+
+    Automations created with this blueprint can be connected with one or more [Hooks](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/hooks) supported by this controller.
+    Hooks allow to easily create controller-based automations for interacting with media players, lights, covers and more.
+    See the list of [Hooks available for this controller](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/controllers/ikea_e1812#available-hooks) for additional details.
+
+    📕 Full documentation regarding this blueprint is available [here](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/controllers/ikea_e1812).
+
+    🚀 This blueprint is part of the **[Awesome HA Blueprints](https://epmatt.github.io/awesome-ha-blueprints) project**.
+
+    ℹ️ Version 2025-01-01 - modified by [dru] removing obsolete helpers relating to calculated double press.
+
   source_url: https://github.com/lsismeiro/awesome-ha-blueprints/blob/main/blueprints/controllers/ikea_e1812/ikea_e1812_dru.yaml
-  domain: automation
   input:
     integration:
       name: (Required) Integration
-      description:
-        Integration used for connecting the remote with Home Assistant.
-        Select one of the available values.
+      description: Integration used for connecting the remote with Home Assistant. Select one of the available values.
       selector:
         select:
           options:
@@ -30,15 +32,10 @@ blueprint:
             - ZHA
             - Zigbee2MQTT
             - Zigbee2MQTT_V2
-          custom_value: false
-          sort: false
-          multiple: false
     controller_device:
       name: (deCONZ, ZHA, Zigbee2MQTT_V2) Controller Device
-      description:
-        The controller device to use for the automation. Choose a value
-        only if the remote is integrated with deCONZ, ZHA, Zigbee2MQTT_V2.
-      default: ""
+      description: The controller device to use for the automation. Choose a value only if the remote is integrated with deCONZ, ZHA, Zigbee2MQTT_V2.
+      default: ''
       selector:
         device:
           filter:
@@ -54,28 +51,19 @@ blueprint:
           multiple: false
     controller_entity:
       name: (Zigbee2MQTT) Controller Entity
-      description:
-        The action sensor of the controller to use for the automation.
-        Choose a value only if the remote is integrated with Zigbee2MQTT.
-      default: ""
+      description: The action sensor of the controller to use for the automation. Choose a value only if the remote is integrated with Zigbee2MQTT.
+      default: ''
       selector:
         entity:
-          domain:
-            - sensor
-          multiple: false
+          domain: sensor
     # helper_last_controller_event:
     #   name: (Required) Helper - Last Controller Event
-    #   description:
-    #     Input Text used to store the last event fired by the controller.
-    #     You will need to manually create a text input entity for this, please read
-    #     the blueprint Additional Notes for more info.
-    #   default: ""
+    #   description: Input Text used to store the last event fired by the controller. You will need to manually create a text input entity for this, please read the blueprint Additional Notes for more info.
+    #   default: ''
     #   selector:
     #     entity:
-    #       domain:
-    #         - input_text
-    #       multiple: false
-
+    #       domain: input_text
+    # inputs for custom actions
     action_button_short:
       name: (Optional) Button short press
       description: Action to run on short button press.
@@ -100,6 +88,7 @@ blueprint:
       default: []
       selector:
         action: {}
+    # inputs for looping custom actions on long button press events until the corresponding release event is received
     button_long_loop:
       name: (Optional) Button long press - loop until release
       description: Loop the button action until the button is released.
@@ -108,10 +97,9 @@ blueprint:
         boolean: {}
     button_long_max_loop_repeats:
       name: (Optional) Button long press - Maximum loop repeats
-      description:
-        Maximum number of repeats for the custom action, when looping is
-        enabled. Use it as a safety limit to prevent an endless loop in case the corresponding
-        stop event is not received.
+      description: >-
+        Maximum number of repeats for the custom action, when looping is enabled.
+        Use it as a safety limit to prevent an endless loop in case the corresponding stop event is not received.
       default: 500
       selector:
         number:
@@ -119,22 +107,17 @@ blueprint:
           max: 5000.0
           mode: slider
           step: 1.0
+    ## inputs for enabling double press events
     # button_double_press:
     #   name: (Optional) Expose button double press event
-    #   description:
-    #     Choose whether or not to expose the virtual double press event
-    #     for the button. Turn this on if you are providing an action for the button
-    #     double press event.
+    #   description: Choose whether or not to expose the virtual double press event for the button. Turn this on if you are providing an action for the button double press event.
     #   default: false
     #   selector:
     #     boolean: {}
+    ## helpers used to properly recognize the remote button events
     # helper_double_press_delay:
     #   name: (Optional) Helper - Double Press delay
-    #   description:
-    #     Max delay between the first and the second button press for the
-    #     double press event. Provide a value only if you are using a double press action.
-    #     Increase this value if you notice that the double press action is not triggered
-    #     properly.
+    #   description: Max delay between the first and the second button press for the double press event. Provide a value only if you are using a double press action. Increase this value if you notice that the double press action is not triggered properly.
     #   default: 500
     #   selector:
     #     number:
@@ -372,7 +355,7 @@ action:
           - choose:
               - conditions: []
                 sequence: !input action_button_short
-      
+
       - conditions: "{{ trigger_action | string in button_double }}"
         sequence:
           - event: ahb_controller_event

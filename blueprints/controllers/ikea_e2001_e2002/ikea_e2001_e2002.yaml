@@ -1,13 +1,14 @@
 # Blueprint metadata
 blueprint:
+  domain: automation
   homeassistant:
-    min_version: "2023.6.0"
+    min_version: 2023.6.0
   name: Controller - IKEA E2001/E2002 STYRBAR Remote control
   description: |
     # Controller - IKEA E2001/E2002 STYRBAR Remote control
 
     Controller automation for executing any kind of action triggered by the provided IKEA E2001/E2002 STYRBAR Remote control. Allows to optionally loop an action on a button long press.
-    Supports deCONZ, ZHA, Zigbee2MQTT, and Zigbee2MQTT_V2 with legacy=false.
+    Supports deCONZ, ZHA, Zigbee2MQTT and Zigbee2MQTT_V2 with legacy=false.
 
     Automations created with this blueprint can be connected with one or more [Hooks](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/hooks) supported by this controller.
     Hooks allow to easily create controller-based automations for interacting with media players, lights, covers and more.
@@ -18,11 +19,8 @@ blueprint:
     🚀 This blueprint is part of the **[Awesome HA Blueprints fork](https://github.com/lsismeiro/awesome-ha-blueprints) **.
 
     ℹ️ Version 2025-01-01
-  source_url: https://github.com/lsismeiro/awesome-ha-blueprints/blob/main/blueprints/controllers/ikea_e2001_e2002/ikea_e2001_e2002.yaml
 
-  domain: automation
-  homeassistant:
-    min_version: 2023.5.0
+  source_url: https://github.com/lsismeiro/awesome-ha-blueprints/blob/main/blueprints/controllers/ikea_e2001_e2002/ikea_e2001_e2002.yaml
   input:
     integration:
       name: (Required) Integration

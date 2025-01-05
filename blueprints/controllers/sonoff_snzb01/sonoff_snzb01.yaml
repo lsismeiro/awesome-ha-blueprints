@@ -1,11 +1,14 @@
 # Blueprint metadata
 blueprint:
+  domain: automation
+  homeassistant:
+    min_version: 2023.6.0
   name: Controller - SONOFF SNZB-01 Wireless Switch
   description: |
     # Controller - SONOFF SNZB-01 Wireless Switch
 
     Controller automation for executing any kind of action triggered by the provided SONOFF SNZB-01 Wireless Switch.
-    Supports deCONZ, ZHA, Zigbee2MQTT, Zigbee2MQTT_V2 with legacy=false.
+    Supports deCONZ, ZHA, Zigbee2MQTT and Zigbee2MQTT_V2 with legacy=false.
 
     Automations created with this blueprint can be connected with one or more [Hooks](https://epmatt.github.io/awesome-ha-blueprints/docs/blueprints/hooks) supported by this controller.
     Hooks allow to easily create controller-based automations for interacting with media players, lights, covers and more.
@@ -16,8 +19,8 @@ blueprint:
     🚀 This blueprint is part of the **[Awesome HA Blueprints](https://epmatt.github.io/awesome-ha-blueprints) project**.
 
     ℹ️ Version 2025-01-01
+
   source_url: https://github.com/lsismeiro/awesome-ha-blueprints/blob/main/blueprints/controllers/sonoff_snzb01/sonoff_snzb01.yaml
-  domain: automation
   input:
     integration:
       name: (Required) Integration
