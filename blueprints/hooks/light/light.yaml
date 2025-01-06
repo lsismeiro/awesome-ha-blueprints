@@ -68,6 +68,13 @@ blueprint:
       selector:
         entity:
           domain: light
+    cycle_scene_dropdown:
+      name: (Optional) Scene dropdown
+      description: Dropdown selection containing a list of scenes. Needed when one of the buttons is configured to cycle scenes.
+      default: ''
+      selector:
+        entity:
+          domain: input_select
     light_color_mode:
       name: (Optional) Light color mode
       description: Specify how the controller will set the light color. Choose "Color Temperature" and "Hue - Saturation" depending on the features supported by your light. If you are not sure you can select "Auto". "None" will disable color control features.
@@ -358,9 +365,12 @@ variables:
   color_up_repeat: '{{ controller_mapping[controller_model]["color_up_repeat"] | default(None) }}'
   color_down: '{{ controller_mapping[controller_model]["color_down"] | default(None) }}'
   color_down_repeat: '{{ controller_mapping[controller_model]["color_down_repeat"] | default(None) }}'
+  cycle_scenes_forward: '{{ controller_mapping[controller_model]["cycle_scenes_forward"] | default(None) }}'
+  cycle_scenes_backward: '{{ controller_mapping[controller_model]["cycle_scenes_backward"] | default(None) }}'
   toggle: '{{ controller_mapping[controller_model]["toggle"] | default(None) }}'
   turn_on: '{{ controller_mapping[controller_model]["turn_on"] | default(None) }}'
   turn_off: '{{ controller_mapping[controller_model]["turn_off"] | default(None) }}'
+  cycle_scene_dropdown: !input cycle_scene_dropdown
   light_color_mode: !input light_color_mode
   light: !input light
   light_transition: !input light_transition
@@ -436,6 +446,30 @@ action:
         sequence:
           - service: light.turn_off
             entity_id: !input light
+            data:
+                  transition: '{{ light_transition / 1000 }}'
+      - conditions: '{{ action == cycle_scenes_forward }}'
+        sequence:
+          - service: input_select.select_next
+            data:
+              cycle: true
+            target:
+              entity_id: '{{ cycle_scene_dropdown }}'
+          - service: scene.turn_on
+            target:
+              entity_id: "{{ states(cycle_scene_dropdown) }}"
+            data:
+              transition: '{{ light_transition / 1000 }}'
+      - conditions: '{{ action == cycle_scenes_backward }}'
+        sequence:
+          - service: input_select.select_previous
+            data:
+              cycle: true
+            target:
+              entity_id: '{{ cycle_scene_dropdown }}'
+          - service: scene.turn_on
+            target:
+              entity_id: "{{ states(cycle_scene_dropdown) }}"
             data:
               transition: '{{ light_transition / 1000 }}'
       - conditions: '{{ action == brightness_up }}'
