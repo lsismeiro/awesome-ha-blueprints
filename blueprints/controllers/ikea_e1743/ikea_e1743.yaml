@@ -251,7 +251,7 @@ variables:
 #**YAR** ADD - Logic to handle z2m legacy
 #**YAR** If user provided input for controller_entity assume legacy **Maybe There Is A Better Way To Do This**
 #**YAR** setting z2m_legacy to true with below code and set controller_id accordingly
-  z2m_legacy: '{{ integration_id == "zigbee2mqtt" and controller_entity not in [''] }}'
+  z2m_legacy: '{{ integration_id == "zigbee2mqtt" and controller_entity not in ["", None, undefined] }}'
   controller_id: '{% if z2m_legacy %}{{controller_entity}}{% else %}{{controller_device}}{% endif %}'
 #**YAR** ADD END
 mode: restart
