@@ -42,9 +42,9 @@ blueprint:
           options:
             - IKEA E1524/E1810 TRÅDFRI Wireless 5-Button Remote
             - IKEA E1743 TRÅDFRI On/Off Switch & Dimmer
- #**YAR** - ADD - IKEA RODRET
+# **YAR** - ADD - IKEA RODRET
             - IKEA E2201 RODRET Dimmer
- #**YAR** - ADD - END
+# **YAR** - ADD - END
             - IKEA E1766 TRÅDFRI Open/Close Remote
             - IKEA E1812 TRÅDFRI Shortcut button
             - SONOFF SNZB-01 Wireless Switch
@@ -79,14 +79,14 @@ variables:
       close_cover: button_down_short
       close_cover_tilt: button_down_long
       stop_cover_all: button_down_double
- #**YAR** - ADD - IKEA RODRET
+# **YAR** - ADD - IKEA RODRET
     IKEA E2201 RODRET Dimmer:
       open_cover: button_up_short
       open_cover_tilt: button_up_long
       close_cover: button_down_short
       close_cover_tilt: button_down_long
       stop_cover_all: button_down_double
- #**YAR** - ADD END
+# **YAR** - ADD END
     IKEA E1766 TRÅDFRI Open/Close Remote:
       open_cover: button_up_short
       close_cover: button_down_short
