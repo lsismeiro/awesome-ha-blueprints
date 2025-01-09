@@ -12,7 +12,7 @@ blueprint:
 
     🚀 This blueprint is part of the **[Awesome HA Blueprints](https://epmatt.github.io/awesome-ha-blueprints) project**.
 
-    ℹ️ Version 2024.07.10
+    ℹ️ Version 2025.01.03
   source_url: https://github.com/lsismeiro/awesome-ha-blueprints/blob/main/blueprints/controllers/philips_324131137411/philips_324131137411.yaml
   domain: automation
   input:
@@ -25,9 +25,10 @@ blueprint:
             - deCONZ
             - ZHA
             - Zigbee2MQTT
+            - Zigbee2MQTT_V2
     controller_device:
-      name: (deCONZ, ZHA) Controller Device
-      description: The controller device to use for the automation. Choose a value only if the remote is integrated with deCONZ, ZHA.
+      name: (deCONZ, ZHA, Zigbee2MQTT_V2) Controller Device
+      description: The controller device to use for the automation. Choose a value only if the remote is integrated with deCONZ, ZHA, Zigbee2MQTT_V2.
       default: ''
       selector:
         device:
@@ -330,6 +331,19 @@ variables:
       button_down_short: [down_press]
       button_down_long: [down_hold]
       button_down_release: [down_hold_release]
+    zigbee2mqtt_v2: # might be incorrect
+      button_on_short: [on_press]
+      button_on_long: [on_hold]
+      button_on_release: [on_hold_release]
+      button_off_short: [off_press]
+      button_off_long: [off_hold]
+      button_off_release: [off_hold_release]
+      button_up_short: [up_press]
+      button_up_long: [up_hold]
+      button_up_release: [up_hold_release]
+      button_down_short: [down_press]
+      button_down_long: [down_hold]
+      button_down_release: [down_hold_release]
   # pre-choose actions for buttons based on configured integration
   # no need to perform this task at automation runtime
   button_on_short: '{{ actions_mapping[integration_id]["button_on_short"] }}'
@@ -356,6 +370,67 @@ trigger:
     event_type: state_changed
     event_data:
       entity_id: !input controller_entity
+  # triggers for zigbee2mqtt_v2
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: on_press
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: on_hold
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: on_hold_release
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: off_press
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: off_hold
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: off_hold_release
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: up_press
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: up_hold
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: up_hold_release
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: down_press
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: down_hold
+  - platform: device
+    domain: mqtt
+    device_id: !input controller_device
+    type: action
+    subtype: down_hold_release
   # trigger for other integrations
   - platform: event
     event_type:
@@ -371,6 +446,8 @@ condition:
         {%- set trigger_action -%}
         {%- if integration_id == "zigbee2mqtt" -%}
         {{ trigger.event.data.new_state.state }}
+        {%- elif integration_id == "zigbee2mqtt_v2" -%}
+        {{ trigger.payload }}
         {%- elif integration_id == "deconz" -%}
         {{ trigger.event.data.event }}
         {%- elif integration_id == "zha" -%}
@@ -381,6 +458,7 @@ condition:
       # only for zigbee2mqtt, check if the event is relative to a real state change, and not only some minor changes in the sensor attributes
       # this is required since multiple state_changed events are fired for a single button press, with the result of the automation being triggered multiple times
       - '{{ integration_id != "zigbee2mqtt" or trigger.event.data.new_state.state != trigger.event.data.old_state.state }}'
+      - '{{ integration_id != "zigbee2mqtt_v2" or trigger.payload != last_controller_event }}'
 action:
   # debouncing - when automation is triggered multiple times, the last automation run is the one which completes execution, due to mode restart
   # therefore previous runs must wait for the debounce delay before executing any other action
@@ -393,6 +471,8 @@ action:
       trigger_action: >-
         {%- if integration_id == "zigbee2mqtt" -%}
         {{ trigger.event.data.new_state.state }}
+        {%- elif integration_id == "zigbee2mqtt_v2" -%}
+        {{ trigger.payload }}
         {%- elif integration_id == "deconz" -%}
         {{ trigger.event.data.event }}
         {%- elif integration_id == "zha" -%}
